@@ -1,0 +1,24 @@
+{
+  "name": "papa-johns-sheese-bot",
+  "version": "1.0.0",
+  "description": "Check Papa Johns stores across the whole of the UK for presence of Vegan Sheese Pizzas",
+  "scripts": {
+    "package": "npm run package-prepare && cd dist && zip -rq ../package.zip .",
+    "package-prepare": "npm run lint && npm run babel && cp -r package.json dist && cd dist && npm install --production",
+    "babel": "rm -rf dist && mkdir dist && ./node_modules/.bin/babel src --out-dir dist",
+    "local": "npm run babel && cp -r node_modules dist && node dist/run.js",
+    "lint": "./node_modules/.bin/eslint src"
+  },
+  "dependencies": {
+    "fs-extra": "7.0.1",
+    "superagent": "4.1.0",
+    "hashmap": "2.3.0"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.395.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "eslint": "^4.6.1",
+    "eslint-config-google": "^0.9.1"
+  }
+}

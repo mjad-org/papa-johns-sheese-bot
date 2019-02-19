@@ -4,6 +4,11 @@ const {HashMap} = require('hashmap');
 const superagent = require('superagent');
 const waitFor = (ms) => new Promise((r) => setTimeout(r, ms));
 
+exports.handler = async (event, context, callback) => {
+	context.callbackWaitsForEmptyEventLoop = false;
+	await exports.processStores();
+};
+
 exports.processStores = async () => {
 	/**
 	 * Reads Store Json from directory into HashMap
@@ -57,13 +62,12 @@ exports.processStores = async () => {
 	async function getStoresJsonWriteToFiles() {
 		const alphabet = [...'abcdefghijklmnopqrstuvwxyz'];
 		const storeSvc = 'https://www.papajohns.co.uk/services/storenamesearch.aspx?term=';
-		const localPath = './stores/';
-		const waitFor = (ms) => new Promise((r) => setTimeout(r, ms));
+
 		alphabet.forEach(async (letter) => {
-			await waitFor(2000);
+			await waitFor(1000);
 			let storeFileName = letter + '-stores.json';
 			console.log(storeFileName);
-			let file = fs.createWriteStream(localPath + storeFileName);
+			let file = fs.createWriteStream(storeJsonPath + storeFileName);
 			https.get(storeSvc + letter, (res) => {
 				console.log(res.statusCode);
 				res.pipe(file);
@@ -99,17 +103,16 @@ exports.processStores = async () => {
 	}
 
 	// start
-
 	try {
-		if (fsp.existsSync(storeJsonPath)) {
-			if (fsp.readdirSync(storeJsonPath).length < 1) {
-				getStoresJsonWriteToFiles();
-			}
+		if (fsp.readdirSync(storeJsonPath).length < 1) {
+			console.log('Downloading Store JSON');
+			getStoresJsonWriteToFiles();
 		}
+
 		let s = await readFiles();
 		checkAllStores(s);
 	} catch (e) {
-		console.error(e);
+		console.log(e);
 	}
 
 	return 'done';

@@ -1,34 +1,63 @@
 trigger:
 - master
 
-pool:
-  vmImage: ubuntu-latest
+variables:
+  AgentImage: 'ubuntu-latest'
 
-steps:
-  - task: NodeTool@0
-    inputs:
-      versionSpec: '>12.x.x'
-    displayName: Install Node
-  
-  - bash: |
-      npm install -no-cache
-      npm install -g serverless
-    displayName: Install Serverless Dependencies and Plugins
-  
-  - bash: serverless package --stage dev --region eu-central-1 --package /tmp/sls_artifacts/
-    displayName: Create package artifact
-  
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathToPublish: /tmp/sls_artifacts
-      artifactName: sls_artifacts
-    displayName: Publish serverless framework package artifact
-  
-  - task: AWSShellScript@1
-    inputs:
-      awsCredentials: 'aws-default'
-      regionName: 'eu-central-1'
-      scriptType: 'inline'
-      inlineScript: sls deploy
-    displayName: Serverless framework deploy
+stages:
+- stage: 'Build'
+  displayName: 'Build'
+  jobs:
+  - job: 'BuildJob'
+    displayName: 'Serverless Build'
+    pool:
+      vmImage: $(AgentImage)
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '>12.x.x'
+      displayName: Install Node
+    
+    - bash: |
+        npm install -no-cache
+        npm install -g serverless
+      displayName: Install Serverless Dependencies and Plugins
+    
+    - bash: serverless package --package /tmp/sls_package/
+      displayName: Create package artifact
+    
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: /tmp/sls_package
+        artifactName: sls_package
+      displayName: Publish serverless framework package artifact
+
+- stage: 'Deploy_AWS_euc1'
+  displayName: 'Deploy sls'
+  dependsOn: ['Build']
+  jobs:
+  - job: 'DeployJob'
+    displayName: 'Serverless Deployment to AWS'
+    pool:
+      vmImage: $(AgentImage)
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '>12.x.x'
+      displayName: Install Node
+    
+    - bash: |
+        npm install -no-cache
+        npm install -g serverless
+      displayName: Install Serverless Dependencies and Plugins
+      
+    - download: current
+      artifact: 'sls_package'
+    - task: AWSShellScript@1
+      inputs:
+        awsCredentials: 'aws-default'
+        regionName: 'eu-central-1'
+        scriptType: 'inline'
+        inlineScript: sls deploy --package $(Pipeline.Workspace)/sls_package
+      displayName: Serverless framework deploy
 

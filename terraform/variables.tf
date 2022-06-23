@@ -8,7 +8,7 @@ variable "description" {
 }
 
 variable "visibility" {
-  default = "private"
+  default = "public"
 }
 
 variable "version_control" {

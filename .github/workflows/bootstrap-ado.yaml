@@ -1,0 +1,37 @@
+name: 'Bootstrap AZDO Terraform'
+ 
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+ 
+jobs:
+  terraform:
+    name: 'Terraform'
+    env:
+      terraform_version: 1.2.3
+      tf_actions_working_dir: terraform
+      AZDO_GITHUB_SERVICE_CONNECTION_PAT: ${{ secrets.GH_REPO_PAT }}
+      AZDO_PERSONAL_ACCESS_TOKEN: ${{ secrets.AZDO_PAT }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ env.tf_actions_working_dir }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.2.3
+    - name: Terraform Init
+      id: init
+      run: terraform init
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate -no-color
+    - name: Terraform Plan
+      id: plan
+      run: terraform plan -no-color
+      continue-on-error: true
+    

@@ -1,0 +1,23 @@
+name: 'Bootstrap AZDO Terraform'
+ 
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+ 
+jobs:
+  terraform:
+    name: 'Terraform'
+    env:
+      
+      terraform_version: 1.2.3
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        shell: bash
+ 
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2

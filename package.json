@@ -4,10 +4,11 @@
   "description": "Check Papa Johns stores across the whole of the UK for presence of Vegan Sheese Pizzas",
   "scripts": {
     "package": "npm run package-prepare && cd dist && zip -rq ../package.zip .",
-    "package-prepare": "npm run lint && npm run babel && cp -r stores package.json dist && cd dist && npm install --production",
+    "package-prepare": "npm run lint && npm run babel && cp -r stores package.json dist && cd dist && npm install --no-audit --production",
     "babel": "rm -rf dist && mkdir dist && ./node_modules/.bin/babel src --out-dir dist",
     "local": "npm run babel && cp -r node_modules dist && node dist/run.js",
-    "lint": "./node_modules/.bin/eslint src"
+    "lint": "./node_modules/.bin/eslint src",
+    "clean": "rm -rf dist && rm -rf ./node_modules && rm -rf package.zip"
   },
   "dependencies": {
     "fs-extra": "7.0.1",

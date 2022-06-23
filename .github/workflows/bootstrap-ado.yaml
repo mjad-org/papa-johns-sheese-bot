@@ -1,4 +1,4 @@
-name: 'Bootstrap AZDO Terraform Plan'
+name: 'Bootstrap AZDO Project Terraform Plan'
  
 on:
   pull_request:

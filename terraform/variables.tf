@@ -1,10 +1,10 @@
 
 variable "project_name" {
-  default = "mjad"
+  default = "papa-johns-sheese-bot"
 }
 
 variable "description" {
-  default = "Sample Azure DevOps Project Created Using Terraform"
+  default = "Azure DevOps Project for papa-johns-sheese-bot"
 }
 
 variable "visibility" {
@@ -26,5 +26,5 @@ variable "ado_service_url" {
 
 variable "github_repo_source_url" {
   type    = string
-  default = "https://github.com/mjad-org/strava-kudos-lambda.git"
+  default = "https://github.com/mjad-org/papa-johns-sheese-bot.git"
 }

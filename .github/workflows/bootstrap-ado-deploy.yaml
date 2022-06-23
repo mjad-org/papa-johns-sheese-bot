@@ -33,5 +33,5 @@ jobs:
       continue-on-error: true
     - name: Terraform Apply
       id: apply
-      run: terraform apply -no-color
+      run: terraform apply -no-color -input=false
       continue-on-error: true

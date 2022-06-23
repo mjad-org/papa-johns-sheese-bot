@@ -5,7 +5,7 @@ service: papa-johns-sheese-bot
 provider:
   name: aws
   stage: dev
-  runtime: nodejs8.10
+  runtime: nodejs12.x
   memorySize: 256
   timeout: 90
   region: eu-west-1

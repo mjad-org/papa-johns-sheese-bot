@@ -15,8 +15,15 @@ steps:
       npm install -g serverless
     displayName: Install Serverless Dependencies and Plugins
   
-  - bash: sls package
+  - bash: serverless package --stage dev --region eu-central-1 --package /tmp/sls_artifacts/
     displayName: Create package artifact
+  
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathToPublish: /tmp/sls_artifacts
+      artifactName: sls_artifacts
+    displayName: Publish serverless framework package artifact
+  
   - task: AWSShellScript@1
     inputs:
       awsCredentials: 'aws-default'

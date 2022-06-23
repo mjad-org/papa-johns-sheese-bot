@@ -1,7 +1,7 @@
 name: 'Bootstrap AZDO Terraform Plan'
  
 on:
-  pull_request:
+  workflow_dispatch:
  
 jobs:
   terraform:
@@ -31,4 +31,7 @@ jobs:
       id: plan
       run: terraform plan -no-color
       continue-on-error: true
-    
+    - name: Terraform Apply
+      id: apply
+      run: terraform apply -no-color
+      continue-on-error: true

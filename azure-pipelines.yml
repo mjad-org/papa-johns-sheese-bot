@@ -10,5 +10,18 @@ steps:
       versionSpec: '>12.x.x'
     displayName: Install Node
   
-  - bash: npm install -no-cache
+  - bash: |
+      npm install -no-cache
+      npm install -g serverless
     displayName: Install Serverless Dependencies and Plugins
+  
+  - bash: sls package
+    displayName: Create package artifact
+  - task: AWSShellScript@1
+    inputs:
+      awsCredentials: 'aws-default'
+      regionName: 'eu-central-1'
+      scriptType: 'inline'
+      inlineScript: sls deploy
+    displayName: Serverless framework deploy
+

@@ -23,7 +23,9 @@ stages:
         npm install -g serverless
       displayName: Install Serverless Dependencies and Plugins
     
-    - bash: serverless package --package /tmp/sls_package/
+    - bash: |
+        serverless package --package /tmp/sls_package/
+        mv ./package.zip /tmp/sls_package
       displayName: Create package artifact
     
     - task: PublishBuildArtifacts@1
@@ -58,6 +60,8 @@ stages:
         awsCredentials: 'aws-default'
         regionName: 'eu-central-1'
         scriptType: 'inline'
-        inlineScript: sls deploy --package $(Pipeline.Workspace)/sls_package
+        inlineScript: | 
+          mv $(Pipeline.Workspace)/sls_package/package.zip .
+          sls deploy --package $(Pipeline.Workspace)/sls_package
       displayName: Serverless framework deploy
 

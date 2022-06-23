@@ -1,16 +1,11 @@
 
 provider "azuredevops" {
   org_service_url       = var.ado_service_url
-  personal_access_token = var.ado_pat
 }
 
 resource "azuredevops_serviceendpoint_github" "serviceendpoint_github" {
   project_id            = azuredevops_project.my_project.id
   service_endpoint_name = "GithHub Personal Access Token"
-
-  auth_personal {
-    personal_access_token = var.github_service_connection_pat
-  }
 }
 
 resource "azuredevops_git_repository" "imported_repo" {

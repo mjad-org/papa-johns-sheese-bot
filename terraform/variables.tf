@@ -21,14 +21,7 @@ variable "work_item_template" {
 
 variable "ado_service_url" {
   type = string
-}
-
-variable "ado_pat" {
-  type = string
-}
-
-variable "github_service_connection_pat" {
-  type = string
+  default = "https://dev.azure.com/mjad-org1"
 }
 
 variable "github_repo_source_url" {

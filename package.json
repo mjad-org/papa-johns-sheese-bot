@@ -14,7 +14,7 @@
     "fs-extra": "7.0.1",
     "hashmap": "2.3.0",
     "superagent": "4.1.0",
-    "uuid": "^3.3.2"
+    "uuid": "^3.4.0"
   },
   "devDependencies": {
     "aws-sdk": "^2.1269.0",
